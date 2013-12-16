@@ -4,7 +4,7 @@ Reddit Crawler
 High level
 ----------
 
-Combines [https://github.com/praw-dev/praw](PRAW) and [http://www.celeryproject.org](Celery) into a barebones "framework" for data collection/processing where [http://www.reddit.com](reddit) is the data source.
+Combines [PRAW](https://github.com/praw-dev/praw) and [Celery](http://www.celeryproject.org) into a barebones "framework" for data collection/processing where [reddit](http://www.reddit.com) is the data source.
 
 That's it really. As of mid-December, the project is tiny as celery and praw do most of the work. 
 
@@ -22,7 +22,7 @@ Celery requires some sort of managed queue for distributing work. Currently only
 Examples
 --------
 
-I've included a simple spidering example. You provide a 'seed' list of subreddits. The spider reads the sidebar of the subreddit, extracts links to other subreddits, then repeats for each found subreddit.
+I've included a simple spidering Breadth-first search example. You provide a 'seed' list of subreddits. The spider reads the sidebar of the subreddit, extracts links to other subreddits, then repeats for each found subreddit.
 
 Create a new project directory:
 ```bash
@@ -41,7 +41,7 @@ then create your run file test.py:
 ```python
 from reddit_crawler.examples.spider.spider import main
 
-main(['funny'])
+main(['python'])
 ```
 
 Now it's time to start a worker. The worker in this example makes the API call via PRAW, then parses the sidebar text for link to other subreddits then returns any found subreddits to the caller. The caller takes these subreddit names, filters out any already seen ones, then creates a new task for each unseen subreddit to find more links from them.
@@ -50,6 +50,13 @@ Invoke:
 ```bash
 python test.py
 ```
+
+This will use r/python's sidebar description as the starting point of the spider.
+
+Why?
+----
+
+I've been working on small reddit related projects. The source has been contained in one repo, meaning that it has become quite messy.
 
 Roadmap
 -------
