@@ -44,7 +44,12 @@ from reddit_crawler.examples.spider.spider import main
 main(['python'])
 ```
 
-Now it's time to start a worker. The worker in this example makes the API call via PRAW, then parses the sidebar text for link to other subreddits then returns any found subreddits to the caller. The caller takes these subreddit names, filters out any already seen ones, then creates a new task for each unseen subreddit to find more links from them.
+Now it's time to start a worker (just like in celery's docs):
+```bash
+celery worker --app=celery_app
+```
+
+The worker in this example makes the API call via PRAW, then parses the sidebar text for link to other subreddits then returns any found subreddits to the caller. The caller takes these subreddit names, filters out any already seen ones, then creates a new task for each unseen subreddit to find more links from them.
 
 Invoke:
 ```bash
