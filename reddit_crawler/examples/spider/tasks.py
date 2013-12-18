@@ -1,8 +1,9 @@
 from HTMLParser import HTMLParser
+from sys import exc_info, stdout
+from traceback import print_exception
 from urlparse import urlparse
 
 from BeautifulSoup import BeautifulSoup, SoupStrainer
-import praw
 
 from reddit_crawler.config import configured_celery_app as celery_app, reddit
 
@@ -39,20 +40,19 @@ def get_subreddit_links(name):
 
     try:
         subreddit = reddit.get_subreddit(name)
-        html = subreddit.description_html
+        html = HTMLParser().unescape(subreddit.description_html)
 
-        if html is None:
-            return []
+        urls = [link['href'] for link in get_links(html)]
+        urls = filter(is_reddit_url, urls)
 
-        html = HTMLParser().unescape(html)
-    except (praw.requests.HTTPError, praw.errors.InvalidSubreddit):
+        subreddits = [get_subreddit_from_url(url) for url in urls]
+        return [link for links in subreddits for link in links]
+
+    except Exception:
+        """
+        Any uncaught exception crashes the task requester.
+        Just catch and log anything exceptions
+        """
+        exc_type, exc_value, exc_traceback = exc_info()
+        print_exception(exc_type, exc_value, exc_traceback, file=stdout)
         return []
-
-    urls = map(lambda link: link['href'], get_links(html))
-    urls = filter(is_reddit_url, urls)
-    subreddits = []
-
-    for url in urls:
-        subreddits += get_subreddit_from_url(url)
-
-    return subreddits

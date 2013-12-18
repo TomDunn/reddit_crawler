@@ -1,7 +1,7 @@
 from celery import group
 from reddit_crawler.examples.spider.tasks import get_subreddit_links
 
-def main(seedlist):
+def spider(seedlist):
     seen = set()
     new  = set(seedlist)
 
@@ -19,10 +19,12 @@ def main(seedlist):
             names = names - seen
             new   = new | names
 
-        print "found: " + str(new)
+        yield new
 
-    print "finishing: " + str(seen)
-    print str(len(seen))
-
-if __name__ == '__main__':
-    main(['Python'])
+def main(seedlist, outfile):
+    with open(outfile, 'w') as f:
+        for new_names in spider(seedlist):
+            for name in new_names:
+                print name
+                f.write("%s\n" % name)
+            f.write("?\n")

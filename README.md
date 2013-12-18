@@ -41,8 +41,9 @@ then create your run file test.py:
 ```python
 from reddit_crawler.examples.spider.spider import main
 
-main(['python'])
+main(['python'], 'subreddits.txt')
 ```
+Where subreddits.txt is some file in your current directory.
 
 Now it's time to start a worker (just like in celery's docs):
 ```bash
