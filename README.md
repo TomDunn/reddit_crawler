@@ -31,7 +31,7 @@ cd my_proj/
 ```
 Those example config files contain information for a local redis broker. If that is not your setup, pleases edit.
 
-reddit_crawler expects two configuration files in your project:
+reddit_crawler expects two configuration files in your project (find examples in reddit_crawler/examples/configs directory):
 ```
 celery_app.py 
 praw_config.py
@@ -61,7 +61,7 @@ This will use r/python's sidebar description as the starting point of the spider
 Why?
 ----
 
-I've been working on small reddit related projects. The source has been contained in one repo, meaning that it has become quite messy.
+I've been working on small reddit related projects. The source has been contained in one repo, meaning that it has become quite messy. So I'm starting to break some of the code out into smaller, reusable repos.
 
 Roadmap
 -------
